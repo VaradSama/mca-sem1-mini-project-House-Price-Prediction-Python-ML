@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}{{ user.username }}'s Predictions{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 style="color: white;"><i class="fa-solid fa-chart-line"></i> Predictions by {{ user.username }}</h2>
+
+    {% if predictions %}
+    <div class="table-responsive mt-3">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Location</th>
+                    <th>BHK</th>
+                    <th>Sqft</th>
+                    <th>Bath</th>
+                    <th>Garage</th>
+                    <th>Year Built</th>
+                    <th>Predicted Price</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pred in predictions %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ pred.input_features.location }}</td>
+                    <td>{{ pred.input_features.bhk }}</td>
+                    <td>{{ pred.input_features.total_sqft }}</td>
+                    <td>{{ pred.input_features.bath }}</td>
+                    <td>{{ pred.input_features.has_garage }}</td>
+                    <td>{{ pred.input_features.year_built }}</td>
+                    <td><strong>₹{{ pred.predicted_price|floatformat:2 }}</strong></td>
+                    <td>{{ pred.created_at|date:"Y-m-d H:i" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-warning mt-3">
+        <i class="fa-solid fa-triangle-exclamation"></i> No predictions found for this user.
+    </div>
+    {% endif %}
+
+    <a href="{% url 'admin_users' %}" class="btn btn-secondary mt-3">
+        <i class="fa-solid fa-arrow-left"></i> Back
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Prediction Details{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 style="color: white;">Prediction Details</h2>
+    <table class="table table-bordered">
+        <tr>
+            <th>ID</th>
+            <td>{{ pred.id }}</td>
+        </tr>
+        <tr>
+            <th>User</th>
+            <td>
+                {% if pred.user %}
+                    {{ pred.user.username }} ({{ pred.user.email }})
+                {% else %}
+                    Anonymous
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Predicted Price</th>
+            <td>₹{{ pred.predicted_price|floatformat:2 }}</td>
+        </tr>
+        <tr>
+            <th>Model Version</th>
+            <td>{{ pred.model_version }}</td>
+        </tr>
+        <tr>
+            <th>Created At</th>
+            <td>{{ pred.created_at|date:"d M Y H:i" }}</td>
+        </tr>
+        <tr>
+            <th>Input Features</th>
+            <td>
+                <pre>{{ pred.input_features}}</pre>
+            </td>
+        </tr>
+    </table>
+    <a href="{% url 'admin_predictions' %}" class="btn btn-secondary mt-2">Back to Predictions</a>
+</div>
+{% endblock %}

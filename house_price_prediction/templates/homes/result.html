@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Prediction Result{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4>🏡 Prediction Result</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>Input:</strong> {{ pred.input_features }}</p>
+                    <p><strong>Predicted Price:</strong> 
+                        {% if pred.predicted_price %}
+                            <span class="text-success">₹{{ pred.predicted_price|floatformat:2 }}</span>
+                        {% else %}
+                            <span class="text-danger">Model not available</span>
+                        {% endif %}
+                    </p>
+                    <p><strong>Predicted at:</strong> {{ pred.created_at }}</p>
+
+                    <div class="text-center mt-3">
+                        <a href="{% url 'predict' %}" class="btn btn-outline-primary">🔄 Make Another Prediction</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

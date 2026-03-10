@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}My Predictions{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center" style="color: white;">My Predictions History</h2>
+
+    {% if predictions %}
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>S.No</th>
+                    <th>ID</th>
+                    <th>Predicted Price</th>
+                    <th>Model Version</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pred in predictions %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ pred.id }}</td>
+                    <td>₹{{ pred.predicted_price|floatformat:2 }}</td>
+                    <td>{{ pred.model_version }}</td>
+                    <td>{{ pred.created_at|date:"d M Y H:i" }}</td>
+                    <td><a href="{% url 'prediction_detail' pred.id %}" class="btn btn-sm btn-info">View</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if predictions.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ predictions.previous_page_number }}">Previous</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                {% endif %}
+
+                {% for num in predictions.paginator.page_range %}
+                    {% if predictions.number == num %}
+                        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% elif num > predictions.number|add:-3 and num < predictions.number|add:3 %}
+                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if predictions.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ predictions.next_page_number }}">Next</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Next</span></li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% else %}
+        <div class="alert alert-info text-center">No predictions found.</div>
+    {% endif %}
+</div>
+{% endblock %}
